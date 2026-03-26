@@ -18,21 +18,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MessageCard("aaa" +
-                    "ddd" +
-                    "eee")
-            PreviewMessageCard()
+            MessageCard(Message("Android","JetPack Compose"))
         }
     }
 }
 
+data class Message(val author: String, val body: String)
+
 @Composable
-fun MessageCard(name: String) {
-    Text(text = "Hello $name!")
+fun MessageCard(msg: Message) {
+    Text(text = msg.author)
+    Text(text = msg.body)
 }
 
 @Preview
 @Composable
 fun PreviewMessageCard() {
-    MessageCard("Android111111111")
+    MessageCard(
+        msg = Message("Lexi", "Hey, take a look at Jetpack Compose, it's great!")
+    )
 }
