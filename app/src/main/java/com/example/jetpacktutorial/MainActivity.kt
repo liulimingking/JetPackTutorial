@@ -65,12 +65,21 @@ fun MessageCard(msg: Message) {
         Column {
             Text(text = msg.author,
                 color = MaterialTheme.colorScheme.secondary,
-                        style = MaterialTheme.typography.titleSmall
+                //MaterialTheme 中提供了 Material Typography 样式，只需将其添加到 Text 可组合项中即可
+                style = MaterialTheme.typography.titleSmall
             )
             // Add a vertical space between the author and message texts
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = msg.body,
-                style = MaterialTheme.typography.titleSmall)
+
+            //首先，将消息正文封装在 Surface 可组合项中。这样即可自定义消息正文的形状和高度。此外，还要为消息添加内边距，以改进布局
+            Surface(shape = MaterialTheme.shapes.medium, shadowElevation = 1.dp) {
+                Text(
+                    text = msg.body,
+                    modifier = Modifier.padding(all = 4.dp),
+                    //MaterialTheme 中提供了 Material Typography 样式，只需将其添加到 Text 可组合项中即可
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
         }
     }
 }
