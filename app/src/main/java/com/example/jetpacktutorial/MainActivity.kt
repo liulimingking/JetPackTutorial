@@ -6,10 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +27,10 @@ import androidx.compose.ui.unit.dp
 import com.example.jetpacktutorial.ui.theme.JetPackTutorialTheme
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +69,12 @@ fun MessageCard(msg: Message) {
         // Add a horizontal space between the image and the column
         Spacer(modifier = Modifier.width(8.dp))
 
-        Column {
+        // We keep track if the message is expanded or not in this
+        // variable
+        var isExpanded by remember { mutableStateOf(false) }
+
+        // We toggle the isExpanded variable when we click on this Column
+        Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
             Text(text = msg.author,
                 color = MaterialTheme.colorScheme.secondary,
                 //MaterialTheme 中提供了 Material Typography 样式，只需将其添加到 Text 可组合项中即可
@@ -75,12 +84,17 @@ fun MessageCard(msg: Message) {
             Spacer(modifier = Modifier.height(4.dp))
 
             //首先，将消息正文封装在 Surface 可组合项中。这样即可自定义消息正文的形状和高度。此外，还要为消息添加内边距，以改进布局
-            Surface(shape = MaterialTheme.shapes.medium, shadowElevation = 1.dp) {
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                shadowElevation = 1.dp) {
                 Text(
                     text = msg.body,
                     modifier = Modifier.padding(all = 4.dp),
                     //MaterialTheme 中提供了 Material Typography 样式，只需将其添加到 Text 可组合项中即可
-                    style = MaterialTheme.typography.titleSmall
+                    style = MaterialTheme.typography.titleSmall,
+                    // If the message is expanded, we display all its content
+                    // otherwise we only display the first line
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 1,
                 )
             }
         }
