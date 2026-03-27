@@ -25,6 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jetpacktutorial.ui.theme.JetPackTutorialTheme
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,9 +34,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JetPackTutorialTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    MessageCard(Message("Android","JetPack Compose"))
-                }
+                Conversation(SampleData.conversationSample)
+//                Surface(modifier = Modifier.fillMaxSize()) {
+//                    MessageCard(Message("Android","JetPack Compose"))
+//                }
             }
 
         }
@@ -93,5 +96,22 @@ fun PreviewMessageCard() {
                 msg = Message("Lexi", "Hey, take a look at Jetpack Compose, it's great!")
             )
         }
+    }
+}
+
+@Composable
+fun Conversation(messages: List<Message>) {
+    LazyColumn {
+        items(messages) { message ->
+            MessageCard(message)
+        }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewConversation() {
+    JetPackTutorialTheme {
+        Conversation(SampleData.conversationSample)
     }
 }
